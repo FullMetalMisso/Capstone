@@ -6,11 +6,11 @@ namespace Capstone.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("Clienti")]
-    public partial class Clienti
+    [Table("Users")]
+    public partial class Users
     {
         [Key]
-        public int ClienteId { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -29,7 +29,7 @@ namespace Capstone.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(255)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [StringLength(50)]

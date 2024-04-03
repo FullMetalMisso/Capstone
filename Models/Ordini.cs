@@ -25,6 +25,6 @@ namespace Capstone.Models
         public DateTime Consegna { get; set; }
 
         [StringLength(10)]
-        public string ClienteId { get; set; }
+        public string UsersId { get; set; }
     }
 }

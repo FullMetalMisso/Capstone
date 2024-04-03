@@ -12,7 +12,7 @@ namespace Capstone.Models
         {
         }
 
-        public virtual DbSet<Clienti> Clienti { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Ordini> Ordini { get; set; }
         public virtual DbSet<Vini> Vini { get; set; }
         public virtual DbSet<OrdVini> OrdVini { get; set; }
@@ -24,7 +24,7 @@ namespace Capstone.Models
                 .HasPrecision(10, 2);
 
             modelBuilder.Entity<Ordini>()
-                .Property(e => e.ClienteId)
+                .Property(e => e.UsersId)
                 .IsFixedLength();
 
             modelBuilder.Entity<Vini>()

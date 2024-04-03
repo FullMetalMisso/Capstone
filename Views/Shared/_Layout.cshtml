@@ -22,6 +22,16 @@
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, new { @class = "nav-link" })</li>
                 </ul>
+                 <ul class="navbar-nav ml-auto">
+     @if (User.Identity.IsAuthenticated)
+     {
+         <li class="nav-item"><a href="@Url.Action("Logout", "Auth")" class="nav-link btn btn-outline-light">Logout</a></li>
+     }
+     else
+     {
+         <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light">Login</a></li>
+     }
+ </ul>
             </div>
         </div>
     </nav>

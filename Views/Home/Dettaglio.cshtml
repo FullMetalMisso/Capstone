@@ -3,37 +3,48 @@
     ViewBag.Title = "Dettaglio";
 }
 
-<h2>Dettaglio</h2>
+
 
 <div>
-    <h4>Articoli</h4>
+   
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Nome)
         </dd>
 
+        <dd>
+            @Html.DisplayFor(model => model.Prezzo) €
+        </dd>
+
+        <dd>
+            <img src="@Model.Img" alt="Immagine" />
+        </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Img)
+            @Html.DisplayNameFor(model => model.Descrizione)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Img)
+            @Html.DisplayFor(model => model.Descrizione)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.Prezzo)
+            @Html.DisplayNameFor(model => model.Tipo)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Prezzo)
+            @Html.DisplayFor(model => model.Tipo)
         </dd>
 
-       
+        <dt>
+            @Html.DisplayNameFor(model => model.Produttore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Produttore)
+        </dd>
+
+
 
     </dl>
 </div>

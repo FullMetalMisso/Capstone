@@ -24,7 +24,7 @@ namespace Capstone.Models
         [Column(TypeName = "date")]
         public DateTime Consegna { get; set; }
 
-        [StringLength(10)]
-        public string UsersId { get; set; }
+        
+        public string UserId { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Capstone.Models
                 .HasPrecision(10, 2);
 
             modelBuilder.Entity<Ordini>()
-                .Property(e => e.UsersId)
+                .Property(e => e.UserId)
                 .IsFixedLength();
 
             modelBuilder.Entity<Vini>()

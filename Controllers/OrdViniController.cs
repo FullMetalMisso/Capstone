@@ -70,8 +70,8 @@ namespace Capstone.Controllers
                 cartCookie.Values["User"] = User.Identity.Name; 
             }
             // Se il vino era giá nel carello viene semplicemente incrementato
-            var existingCartItem = viniCart.FirstOrDefault(v => v.Vino.VinoId == vino.VinoId);
-            if (existingCartItem == null)
+            var existingCartItem = viniCart.FirstOrDefault(item => item.Vino.VinoId == vino.VinoId);
+            if (existingCartItem != null)
             {
                 existingCartItem.Quantita++;
             }
@@ -93,7 +93,7 @@ namespace Capstone.Controllers
                         Produttore = vino.Produttore,
                     },
                     Quantita = 1,
-                    UserId = Convert.ToInt32(User.Identity.Name),
+                  UserId = Convert.ToInt32(User.Identity.Name),
                 };
                 viniCart.Add(vinoCart);
             }
@@ -110,7 +110,46 @@ namespace Capstone.Controllers
 
         }
 
-       
+        [HttpGet]
+
+        public ActionResult Cart()
+        {
+            //inizializzazione lista VinoCart
+            List<VinoCart> userVinoCart = new List<VinoCart>();
+
+            //verifica esistenza cookie carrello per l'utente loggato
+            if (Request.Cookies["Carrello" + User.Identity.Name] != null && Request.Cookies["Carrello" + User.Identity.Name]["User"] != null)
+            {
+                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+                var userId = Convert.ToInt32(User.Identity.Name);
+
+                //Decodifica val cookie & riempie lista
+                var viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
+
+                //Filtra gli articoli in base all'utente loggato
+                userVinoCart = viniCart.Where(v => v.UserId == userId).ToList();
+                ViewBag.UserCart = userVinoCart;
+            }
+            return View();
+        }
+
+        public ActionResult Search(string searchTerm)
+        {
+            // Esegui la ricerca nel database
+            var vino = db.Vini.FirstOrDefault(v => v.Nome.Contains(searchTerm));
+
+            if (vino != null)
+            {
+                // Se il vino è stato trovato, reindirizza alla pagina di dettaglio del vino
+                return RedirectToAction("Dettaglio", "Home", new { id = vino.VinoId });
+            }
+            else
+            {
+                // Se il vino non è stato trovato, gestisci il caso in cui non ci siano corrispondenze
+                ViewBag.ErrorMessage = "Nessun vino trovato.";
+                return View("Error"); // Reindirizza a una vista di errore personalizzata
+            }
+        }
         // GET: OrdVini/Delete/5
         public ActionResult Delete(int? id)
         {

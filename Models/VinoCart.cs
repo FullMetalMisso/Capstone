@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +14,6 @@ namespace Capstone.Models
 
         public int UserId { get; set; }
 
-        public Users Users { get; set; }    
+        public Users User { get; set; }    
     }
 }

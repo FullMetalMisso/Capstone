@@ -5,46 +5,49 @@
 
 
 
-<div>
-   
+
+
     <hr />
-    <dl class="dl-horizontal">
+    <div class="d-flex">
+        <dl>
 
-        <dd>
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Prezzo) €
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Prezzo) €
+            </dd>
 
-        <dd>
-            <img src="@Model.Img" alt="Immagine" />
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Descrizione)
-        </dt>
+            <dd>
+                <img src="@Model.Img" alt="Immagine" />
+            </dd>
+        </dl>
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Descrizione)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Descrizione)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Tipo)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Descrizione)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Tipo)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Tipo)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Produttore)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Produttore)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Produttore)
-        </dd>
+            <dd>
+                @Html.DisplayFor(model => model.Produttore)
+            </dd>
 
 
 
-    </dl>
-</div>
+        </dl>
+    </div>

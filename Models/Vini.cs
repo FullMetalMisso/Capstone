@@ -9,6 +9,7 @@ namespace Capstone.Models
     [Table("Vini")]
     public partial class Vini
     {
+   
         [Key]
         public int VinoId { get; set; }
 
@@ -33,5 +34,6 @@ namespace Capstone.Models
 
         [StringLength(50)]
         public string Produttore { get; set; }
+
     }
 }

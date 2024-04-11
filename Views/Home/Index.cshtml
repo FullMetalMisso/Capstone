@@ -1,10 +1,4 @@
-﻿@model IEnumerable<Capstone.Models.Vini>
-
-@{
-    ViewBag.Title = "Index";
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,31 +8,31 @@
     @Styles.Render("~/Content/bootstrap.min.css")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-   
+    <link href="~/Stile/Css/StyleHome.css" rel="stylesheet" />
+    
 </head>
 <body>
-    <form action="@Url.Action("Search", "OrdVini")" method="get">
-        <input type="text" name="searchTerm" placeholder="Cerca vino..." />
-        <button type="submit">Cerca</button>
-    </form>
-    <h2 class="text-center mb-4">I nostri vini</h2>
-
     <div class="container">
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 mt-4">
+        <form class="search-form mb-4" action="@Url.Action("Search", "OrdVini")" method="get">
+            <div class="input-group justify-content-end">
+                <input type="text" class="form-control" name="searchTerm" placeholder="Cerca vino..." />
+                <button type="submit" class="btn btn-primary">Cerca</button>
+            </div>
+        </form>
+
+        <h2 class="text-center mb-4">I nostri vini</h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
             @foreach (var item in Model)
             {
                 <div class="col mb-4">
                     <div class="card h-100">
-                        <a href="@Url.Action("Dettaglio", "Home", new {id = item.VinoId })">
-                            <img src="@item.Img" class="card-img" alt="@item.Nome">
+                        <a href="@Url.Action("Dettaglio", "Home", new { id = item.VinoId })">
+                            <img src="@item.Img" class="card-img-top" alt="@item.Nome">
                         </a>
                         <div class="card-body">
                             <h5 class="card-title">@item.Nome</h5>
                             <p class="card-text">Prezzo: @item.Prezzo €</p>
-                            @using (Html.BeginForm("AddToCart", "OrdVini", new { id = item.VinoId }, FormMethod.Post))
-                            {
-                                <input class="btn btn-success rounded-pill" type="submit" value="Aggiungi all'ordine" />
-                            }
                         </div>
                     </div>
                 </div>

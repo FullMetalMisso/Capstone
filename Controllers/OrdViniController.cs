@@ -21,21 +21,8 @@ namespace Capstone.Controllers
             return View(db.OrdVini.ToList());
         }
 
-        // GET: OrdVini/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            OrdVini ordVini = db.OrdVini.Find(id);
-            if (ordVini == null)
-            {
-                return HttpNotFound();
-            }
-            return View(ordVini);
-        }
-
+      
+       
         [HttpPost]
         public ActionResult AddToCart(int? id)
         {
@@ -106,7 +93,7 @@ namespace Capstone.Controllers
             //Cookie aggiunto alla response e finally reindirizzazione alla home. 
             Response.Cookies.Add(cartCookie);
 
-            return RedirectToAction("Index"); // Reindirizzare direttamente al carrello? || incentivo all'acquisto?
+            return RedirectToAction("Index", "Home"); // Reindirizzare direttamente al carrello? || incentivo all'acquisto?
 
         }
 
@@ -133,10 +120,81 @@ namespace Capstone.Controllers
             return View();
         }
 
+        [HttpPost]
+
+        public ActionResult RimuoviDalCarrello(int vinoId)
+        {
+            var viniCart = new List<VinoCart>();
+            if (Request.Cookies["Carrello" + User.Identity.Name] != null && Request.Cookies["Carrello" + User.Identity.Name]["User"] != null)
+            {
+                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+                viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
+            }
+
+            var vinoRemove = viniCart.FirstOrDefault(v => v.Vino.VinoId == vinoId);
+            if (vinoRemove != null)
+            {
+                viniCart.Remove(vinoRemove);
+            }
+
+            var cartCookie = new HttpCookie("Carrello" + User.Identity.Name);
+            if(viniCart.Any()) //controlla la presenza di articoli nel carrello
+            {
+                cartCookie.Values["User"] = HttpUtility.UrlEncode(JsonConvert.SerializeObject(viniCart));
+                cartCookie.Expires = DateTime.Now.AddDays(1);
+            }
+            else
+            {
+                cartCookie.Expires = DateTime.Now.AddDays(-1);
+            }
+            Response.Cookies.Add(cartCookie);
+
+            return RedirectToAction("Cart");
+          
+        }
+
+        [HttpPost]
+        
+        public ActionResult AggiornaQuantita(int vinoId, string operazione)
+        {
+            // Recupera l'elenco degli articoli attualmente nel carrello dal cookie
+            var viniCart = new List<VinoCart>();
+            if (Request.Cookies["Carrello" + User.Identity.Name] != null && Request.Cookies["Carrello" + User.Identity.Name]["User"] != null)
+            {
+                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+                viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
+            }
+
+            // Trova l'articolo con l'ID specificato nell'elenco
+            var vino = viniCart.FirstOrDefault(a => a.Vino.VinoId == vinoId);
+            if (vino != null)
+            {
+                // Aggiorna la quantità in base all'operazione
+                if (operazione == "incrementa")
+                {
+                    vino.Quantita++;
+                }
+                else if (operazione == "decrementa" && vino.Quantita > 1)
+                {
+                    vino.Quantita--;
+                }
+            }
+
+            // Aggiorna il cookie del carrello con l'elenco aggiornato degli articoli
+            var cartCookie = new HttpCookie("Carrello" + User.Identity.Name);
+            cartCookie.Values["User"] = HttpUtility.UrlEncode(JsonConvert.SerializeObject(viniCart));
+            cartCookie.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.Add(cartCookie);
+
+            // Reindirizza alla vista del carrello aggiornata
+            return RedirectToAction("Cart");
+        }
+
+
         public ActionResult Search(string searchTerm)
         {
             // Esegui la ricerca nel database
-            var vino = db.Vini.FirstOrDefault(v => v.Nome.Contains(searchTerm));
+           var vino = db.Vini.FirstOrDefault(v => v.Nome.Contains(searchTerm));
 
             if (vino != null)
             {

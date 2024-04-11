@@ -11,9 +11,13 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body">
         <div class="container-fluid">
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">Dal Lupo Ubriaco</a>
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                <div style="width: 125px; height: 125px; border-radius: 50%; overflow: hidden;">
+                    <img src="~/Stile/Immagini/_010be895-15a4-429d-a858-7a66e320d81e.png" alt="Logo" class="navbar-logo" style="max-height: 100%; width: auto;">
+                </div>
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,11 +37,12 @@
                                 <li><a class="dropdown-item" href="@Url.Action("Logout", "Auth")">Logout</a></li>
                             </ul>
                         </li>
-                        
+                        <li class="nav-item"><a href="@Url.Action("Cart", "OrdVini")">🛒</a></li>
+
                     }
                     else
                     {
-                         <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light text-start">Login</a></li>
+                        <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light text-start">Login</a></li>
                     }
 
                 </ul>

@@ -1,4 +1,4 @@
-namespace Capstone.Models
+namespace Capstone
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,12 @@ namespace Capstone.Models
     [Table("Ordini")]
     public partial class Ordini
     {
-  
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Ordini()
+        {
+            Checkouts = new HashSet<Checkout>();
+        }
+
         public int OrdiniId { get; set; }
 
         [Required]
@@ -25,8 +30,11 @@ namespace Capstone.Models
         [Column(TypeName = "date")]
         public DateTime Consegna { get; set; }
 
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
-        public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Checkout> Checkouts { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

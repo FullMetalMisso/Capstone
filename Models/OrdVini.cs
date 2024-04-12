@@ -24,8 +24,8 @@ namespace Capstone.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Quantita { get; set; }
 
-        public virtual Vini Vini { get; set; }  
-
         public virtual Ordini Ordini { get; set; }
+
+        public virtual Vini Vini { get; set; }
     }
 }

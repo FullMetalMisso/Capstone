@@ -1,0 +1,50 @@
+﻿@model Capstone.Models.Checkout
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Checkout</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Ordini.Indirizzo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ordini.Indirizzo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Users.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Users.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataCheckout)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataCheckout)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Totale)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Totale)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CheckoutId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

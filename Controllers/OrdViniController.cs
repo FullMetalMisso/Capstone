@@ -16,13 +16,27 @@ namespace Capstone.Controllers
         private DBContext db = new DBContext();
 
         // GET: OrdVini
-        public ActionResult Index()
+        public ActionResult Details(int? id)
         {
-            return View(db.OrdVini.ToList());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var ordineWithArticoli = db.OrdVini
+                .Include(o => o.Ordini)
+                .Include(o => o.Ordini.Users)
+                .Include(o => o.Vini)
+                .SingleOrDefault(o => o.OrdiniId == id);
+
+            if (ordineWithArticoli == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(ordineWithArticoli);
         }
 
-      
-       
         [HttpPost]
         public ActionResult AddToCart(int? id)
         {
@@ -116,6 +130,7 @@ namespace Capstone.Controllers
                 //Filtra gli articoli in base all'utente loggato
                 userVinoCart = viniCart.Where(v => v.UserId == userId).ToList();
                 ViewBag.UserCart = userVinoCart;
+                ViewBag.Pagamento = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento");
             }
             return View();
         }
@@ -150,8 +165,58 @@ namespace Capstone.Controllers
             Response.Cookies.Add(cartCookie);
 
             return RedirectToAction("Cart");
-          
+
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrderFromCart(Ordini ordVino)
+        {
+           
+                ordVino.UserId = Convert.ToInt32(User.Identity.Name);
+
+                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+                var userId = Convert.ToInt32(User.Identity.Name);
+
+                var viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
+                var userVinoCart = viniCart.Where(a => a.UserId == userId).ToList();
+
+                decimal totale = 0;
+
+                foreach (var art in userVinoCart)
+                {
+                    totale += (art.Quantita * art.Vino.Prezzo);
+                }
+                ordVino.Totale = totale;
+
+                ordVino.Stato = "Preparazione";
+
+                db.Ordini.Add(ordVino);
+                db.SaveChanges();
+
+                int newOrdineID = ordVino.OrdiniId;
+
+                foreach (var vino in userVinoCart)
+                {
+                    var newOrdVino = new OrdVini(); // Usa il nome corretto della classe
+                    newOrdVino.VinoId = vino.Vino.VinoId;
+                    newOrdVino.OrdiniId = newOrdineID;
+                    newOrdVino.Quantita = Convert.ToInt32(vino.Quantita);
+                    db.OrdVini.Add(newOrdVino); // Aggiungi gli oggetti al contesto del database
+                }
+
+                db.SaveChanges();
+
+                HttpCookie userCookie = Request.Cookies["Carrello" + User.Identity.Name];
+                if (userCookie != null)
+                {
+                    userCookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(userCookie);
+                }
+
+                return RedirectToAction("Details", "OrdVini", new { id = newOrdineID });
+
+            }
+           
 
         [HttpPost]
         

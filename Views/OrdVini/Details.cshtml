@@ -4,15 +4,40 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2 class="my-4">Dettagli Ordine</h2>
 
-<div>
-    <h4>OrdVini</h4>
-    <hr />
-    <dl class="dl-horizontal">
-    </dl>
-</div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<p><strong>Nome:</strong> @Model.Ordini.Users.Nome</p>
+<p><strong>Cognome:</strong> @Model.Ordini.Users.Cognome</p>
+<p><strong>Indirizzo:</strong> @Model.Ordini.Indirizzo</p>
+<p><strong>Note:</strong> @Model.Ordini.Stato</p>
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Articolo</th>
+                <th>Quantità</th>
+                <th>Prezzo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Vini.Nome</td>
+                <td>@Model.Quantita pz.</td>
+                <td>€ @Model.Vini.Prezzo</td>
+            </tr>
+            <tr>
+                <td style="height:75px; vertical-align: bottom;" colspan="2"><strong>Prezzo Totale:</strong></td>
+                <td style="vertical-align: bottom;">€ @(Model.Vini.Prezzo * Model.Quantita)</td>
+            </tr>
+        </tbody>
+    </table>
+    <div>
+        <a href="/Ordini/Details/@User.Identity.Name" class="btn btn-outline-primary my-3">Torna allo Storico</a>
+    </div>
+}
+else
+{
+    <p>Nessun articolo trovato per questo ordine.</p>
+}

@@ -9,7 +9,12 @@ namespace Capstone.Models
     [Table("Ordini")]
     public partial class Ordini
     {
-  
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Ordini()
+        {
+            OrdVini = new HashSet<OrdVini>();
+        }
+
         public int OrdiniId { get; set; }
 
         [Required]
@@ -25,8 +30,23 @@ namespace Capstone.Models
         [Column(TypeName = "date")]
         public DateTime Consegna { get; set; }
 
-        public string UserId { get; set; }
+        public int UserId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Nome { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Cognome { get; set; }
+
+        public int PagamentoId { get; set; }
+
+        public virtual Pagamenti Pagamenti { get; set; }
 
         public virtual Users Users { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrdVini> OrdVini { get; set; }
     }
 }

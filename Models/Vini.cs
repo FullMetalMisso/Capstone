@@ -9,7 +9,12 @@ namespace Capstone.Models
     [Table("Vini")]
     public partial class Vini
     {
-   
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Vini()
+        {
+            OrdVini = new HashSet<OrdVini>();
+        }
+
         [Key]
         public int VinoId { get; set; }
 
@@ -35,5 +40,7 @@ namespace Capstone.Models
         [StringLength(50)]
         public string Produttore { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrdVini> OrdVini { get; set; }
     }
 }

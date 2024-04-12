@@ -6,41 +6,24 @@ namespace Capstone.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class Users
+    [Table("Pagamenti")]
+    public partial class Pagamenti
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Users()
+        public Pagamenti()
         {
             Ordini = new HashSet<Ordini>();
         }
 
         [Key]
-        public int UserId { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string Nome { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string Cognome { get; set; }
-
-        [Required]
-        [StringLength(50)]
-        public string Indirizzo { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string Email { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string Password { get; set; }
+        public int PagamentoId { get; set; }
 
         [StringLength(50)]
-        public string Ruolo { get; set; }
+        public string TipoPagamento { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ordini> Ordini { get; set; }
+        
+
     }
 }

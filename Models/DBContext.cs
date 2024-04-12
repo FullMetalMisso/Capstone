@@ -8,12 +8,13 @@ namespace Capstone.Models
     public partial class DBContext : DbContext
     {
         public DBContext()
-            : base("name=DBContext")
+            : base("name=DBContext2")
         {
         }
 
-        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Ordini> Ordini { get; set; }
+        public virtual DbSet<Pagamenti> Pagamenti { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Vini> Vini { get; set; }
         public virtual DbSet<OrdVini> OrdVini { get; set; }
 
@@ -24,12 +25,32 @@ namespace Capstone.Models
                 .HasPrecision(10, 2);
 
             modelBuilder.Entity<Ordini>()
-                .Property(e => e.UserId)
-                .IsFixedLength();
+                .HasMany(e => e.OrdVini)
+                .WithRequired(e => e.Ordini)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Pagamenti>()
+                .Property(e => e.TipoPagamento)
+                .IsUnicode(false);
+
+            modelBuilder.Entity<Pagamenti>()
+                .HasMany(e => e.Ordini)
+                .WithRequired(e => e.Pagamenti)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Users>()
+                .HasMany(e => e.Ordini)
+                .WithRequired(e => e.Users)
+                .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Vini>()
                 .Property(e => e.Prezzo)
                 .HasPrecision(10, 2);
+
+            modelBuilder.Entity<Vini>()
+                .HasMany(e => e.OrdVini)
+                .WithRequired(e => e.Vini)
+                .WillCascadeOnDelete(false);
         }
     }
 }

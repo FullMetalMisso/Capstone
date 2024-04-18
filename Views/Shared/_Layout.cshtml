@@ -6,12 +6,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - Applicazione ASP.NET</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
+    <style>
+    </style>
+
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body">
+    <nav class="navbar navbar-expand-lg bg-body navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">
                 <div style="width: 125px; height: 125px; border-radius: 50%; overflow: hidden;">
@@ -26,6 +32,15 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Home")">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="@Url.Action("Noi", "Home")">Su di noi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="@Url.Action("DoveTrovarci", "Home")">Dove Trovarci</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="@Url.Action("Report", "Home")">Per la sostenibilitá</a>
+                    </li>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item dropdown">
@@ -33,22 +48,34 @@
                                 Profilo
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Il mio profilo</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("ProfiloUtente", "Profilo")">Il mio profilo</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Details", "Ordini", new { id = User.Identity.Name})">I miei ordini</a></li>
                                 <li><a class="dropdown-item" href="@Url.Action("Logout", "Auth")">Logout</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a href="@Url.Action("Cart", "OrdVini")">🛒</a></li>
-
                     }
                     else
                     {
                         <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light text-start">Login</a></li>
                     }
-
                 </ul>
-                
+                @if (User.Identity.IsAuthenticated)
+                {
+
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a href="@Url.Action("Cart", "OrdVini")" class="nav-link">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span id="numeroElementiCarrello" class="badge bg-primary"></span>
+                            </a>
+                        </li>
+                    </ul>
+                }
             </div>
         </div>
+
+
+
     </nav>
     <div class="container body-content">
         @RenderBody()
@@ -60,6 +87,29 @@
 
     @Scripts.Render("~/bundles/jquery")
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+  $(document).ready(function () {
+    // Effettua una richiesta AJAX per ottenere il numero di elementi nel carrello
+    $.ajax({
+        url: "@Url.Action("GetNumeroElementiCarrello", "OrdVini")", // Aggiungi un'azione nel controller per ottenere il numero di elementi nel carrello
+        type: "GET",
+        success: function (data) {
+            // Verifica se ci sono elementi nel carrello
+            if (data > 0) {
+                // Aggiorna il contenuto del badge con il numero di elementi nel carrello
+                $("#numeroElementiCarrello").text(data);
+            } else {
+                // Nasconde il badge se non ci sono elementi nel carrello
+                $("#numeroElementiCarrello").hide();
+            }
+        },
+        error: function () {
+            console.error("Errore durante il recupero del numero di elementi nel carrello.");
+        }
+    });
+});
+
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

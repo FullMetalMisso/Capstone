@@ -40,6 +40,21 @@ namespace Capstone.Models
         [StringLength(50)]
         public string Produttore { get; set; }
 
+        public string SottoTipo { get; set; } 
+        
+        public decimal? Sconto { get; set; }
+        public decimal PrezzoConSconto
+        {
+            get
+            {
+                if (Sconto != null)
+                {
+                    return Prezzo - (Prezzo * (decimal)Sconto / 100);
+                }
+                return Prezzo;
+            }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrdVini> OrdVini { get; set; }
     }

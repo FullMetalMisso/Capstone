@@ -11,7 +11,16 @@
         </div>
         <div class="col-md-6">
             <h2>@Model.Nome</h2>
-            <p>Prezzo: @Model.Prezzo €</p>
+            @if (Model.Sconto != null)
+            {
+                var prezzoScontato = Model.Prezzo - (Model.Prezzo * (decimal)Model.Sconto / 100);
+                <p>Prezzo: <span style="color: red;">@prezzoScontato.ToString("0.##") €</span> (@Model.Sconto % di sconto)</p>
+                <p>Prezzo Originale: <del>@Model.Prezzo €</del></p>
+            }
+            else
+            {
+                <p>Prezzo: @Model.Prezzo €</p>
+            }
             <p>Descrizione: @Model.Descrizione</p>
             <p>Tipo: @Model.Tipo</p>
             <p>Produttore: @Model.Produttore</p>
@@ -19,13 +28,20 @@
             {
                 using (Html.BeginForm("AddToCart", "OrdVini", new { id = Model.VinoId }, FormMethod.Post))
                 {
-                    <input type="submit" value="Aggiungi all'ordine" class="btn btn-success" />
+                    if (Model.Magazzino > 0)
+                    {
+                        <input type="submit" value="Aggiungi all'ordine" class="btn btn-success" />
+                    }
+                    else
+                    {
+                        <p style="color: red;">Prodotto non disponibile</p>
+                    }
                 }
-            }else
-            {
-        <p style="color: red;">Ti devi loggare per acquistare</p>
             }
-
+            else
+            {
+                <p style="color: red;">Ti devi loggare per acquistare</p>
+            }
         </div>
     </div>
 </div>

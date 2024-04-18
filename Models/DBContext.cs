@@ -1,3 +1,4 @@
+using Capstone.Controllers;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -11,7 +12,7 @@ namespace Capstone.Models
             : base("name=DBContext2")
         {
         }
-
+       
         public virtual DbSet<Ordini> Ordini { get; set; }
         public virtual DbSet<Pagamenti> Pagamenti { get; set; }
         public virtual DbSet<Users> Users { get; set; }

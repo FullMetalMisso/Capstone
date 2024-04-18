@@ -1,5 +1,6 @@
-﻿@using Capstone.Models;
+﻿@using Capstone.Models
 @model Users
+
 @{
     ViewBag.Title = "Login";
 }
@@ -39,8 +40,11 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary my-2">Login</button>
+                <a href="@Url.Action("Create", "Users")" class="text-info d-block mt-3">Non sei ancora registrato?</a>
+              
 
-               
+
+
             }
         </div>
     </div>

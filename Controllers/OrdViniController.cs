@@ -27,7 +27,7 @@ namespace Capstone.Controllers
                 .Include(o => o.Ordini)
                 .Include(o => o.Ordini.Users)
                 .Include(o => o.Vini)
-                .SingleOrDefault(o => o.OrdiniId == id);
+                .Where(o => o.OrdiniId == id).ToList();
 
             if (ordineWithArticoli == null)
             {
@@ -132,9 +132,33 @@ namespace Capstone.Controllers
                 ViewBag.UserCart = userVinoCart;
                 ViewBag.Pagamento = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento");
             }
+            // Ottieni il numero di elementi nel carrello
+            int numeroElementiCarrello = userVinoCart.Sum(item => item.Quantita);
+            ViewBag.NumeroElementiCarrello = numeroElementiCarrello;
             return View();
         }
 
+        public ActionResult GetNumeroElementiCarrello()
+        {
+            // Inizializza il numero di elementi nel carrello a 0
+            int numeroElementiCarrello = 0;
+
+            // Verifica se esiste un cookie per il carrello per l'utente attualmente autenticato
+            if (Request.Cookies["Carrello" + User.Identity.Name] != null && Request.Cookies["Carrello" + User.Identity.Name]["User"] != null)
+            {
+                // Decodifica il valore del cookie per ottenere la lista dei prodotti nel carrello
+                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+
+                // Deserializza la lista dei prodotti nel carrello
+                var viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
+
+                // Somma le quantità di tutti i prodotti nel carrello
+                numeroElementiCarrello = viniCart.Sum(item => item.Quantita);
+            }
+
+            // Restituisci il numero di elementi nel carrello in formato JSON
+            return Json(numeroElementiCarrello, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
 
         public ActionResult RimuoviDalCarrello(int vinoId)
@@ -167,56 +191,69 @@ namespace Capstone.Controllers
             return RedirectToAction("Cart");
 
         }
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrderFromCart(Ordini ordVino)
         {
-           
-                ordVino.UserId = Convert.ToInt32(User.Identity.Name);
+            // Imposta l'ID dell'utente per l'ordine
+            ordVino.UserId = Convert.ToInt32(User.Identity.Name);
 
-                var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
-                var userId = Convert.ToInt32(User.Identity.Name);
+            // Recupera il carrello degli acquisti dell'utente corrente
+            var cartJson = HttpUtility.UrlDecode(Request.Cookies["Carrello" + User.Identity.Name]["User"]);
+            var viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
 
-                var viniCart = JsonConvert.DeserializeObject<List<VinoCart>>(cartJson);
-                var userVinoCart = viniCart.Where(a => a.UserId == userId).ToList();
-
-                decimal totale = 0;
-
-                foreach (var art in userVinoCart)
+            // Calcola il totale dell'ordine e aggiorna il magazzino
+            decimal totale = 0;
+            foreach (var vino in viniCart.Where(a => a.UserId == ordVino.UserId))
+            {
+                totale += (vino.Quantita * vino.Vino.Prezzo);
+                var vinoAcquistato = db.Vini.Find(vino.Vino.VinoId);
+                if (vinoAcquistato != null)
                 {
-                    totale += (art.Quantita * art.Vino.Prezzo);
+                    vinoAcquistato.Magazzino -= vino.Quantita;
                 }
-                ordVino.Totale = totale;
-
-                ordVino.Stato = "Preparazione";
-
-                db.Ordini.Add(ordVino);
-                db.SaveChanges();
-
-                int newOrdineID = ordVino.OrdiniId;
-
-                foreach (var vino in userVinoCart)
-                {
-                    var newOrdVino = new OrdVini(); // Usa il nome corretto della classe
-                    newOrdVino.VinoId = vino.Vino.VinoId;
-                    newOrdVino.OrdiniId = newOrdineID;
-                    newOrdVino.Quantita = Convert.ToInt32(vino.Quantita);
-                    db.OrdVini.Add(newOrdVino); // Aggiungi gli oggetti al contesto del database
-                }
-
-                db.SaveChanges();
-
-                HttpCookie userCookie = Request.Cookies["Carrello" + User.Identity.Name];
-                if (userCookie != null)
-                {
-                    userCookie.Expires = DateTime.Now.AddDays(-1);
-                    Response.Cookies.Add(userCookie);
-                }
-
-                return RedirectToAction("Details", "OrdVini", new { id = newOrdineID });
-
             }
+
+            // Imposta lo stato e il totale dell'ordine
+            ordVino.Stato = "In Preparazione";
+            ordVino.Totale = totale;
+
            
+            db.Ordini.Add(ordVino);
+            db.SaveChanges();
+
+            // Ottiene l'ID dell'ordine appena creato
+            int newOrdineID = ordVino.OrdiniId;
+
+            // Aggiunge i dettagli dell'ordine nel database
+            foreach (var vino in viniCart.Where(a => a.UserId == ordVino.UserId))
+            {
+                var newOrdVino = new OrdVini
+                {
+                    VinoId = vino.Vino.VinoId,
+                    OrdiniId = newOrdineID,
+                    Quantita = Convert.ToInt32(vino.Quantita)
+                };
+                db.OrdVini.Add(newOrdVino);
+            }
+
+            
+            db.SaveChanges();
+
+            // Svuota il carrello dell'utente cancellando i cookie
+            HttpCookie userCookie = Request.Cookies["Carrello" + User.Identity.Name];
+            if (userCookie != null)
+            {
+                userCookie.Expires = DateTime.Now.AddDays(-1);
+                Response.Cookies.Add(userCookie);
+            }
+
+            
+            return RedirectToAction("Details", "OrdVini", new { id = newOrdineID });
+        }
+
+
 
         [HttpPost]
         
@@ -273,6 +310,18 @@ namespace Capstone.Controllers
                 return View("Error"); // Reindirizza a una vista di errore personalizzata
             }
         }
+
+        public ActionResult ViniPerTipo(string tipo, string sottoTipo)
+        {
+            // Recupera i vini dal database basandoti sul tipo e sottoTipo specificati
+            var viniPerTipo = db.Vini.Where(v => v.Tipo == tipo && (sottoTipo == null || v.SottoTipo == sottoTipo)).ToList();
+
+            // Passa il tipo di vino, il sottoTipo e i vini alla vista per la visualizzazione
+            ViewBag.TipoVino = tipo;
+            ViewBag.SottoTipoVino = sottoTipo;
+            return View(viniPerTipo);
+        }
+
         // GET: OrdVini/Delete/5
         public ActionResult Delete(int? id)
         {

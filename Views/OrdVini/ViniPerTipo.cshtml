@@ -1,0 +1,50 @@
+﻿@model List<Capstone.Models.Vini>
+
+@{
+    string tipoVino = ViewBag.TipoVino;
+    string sottoTipoVino = ViewBag.SottoTipoVino;
+    string titoloPagina = string.Empty;
+
+    if (tipoVino == "Spirits" && !string.IsNullOrEmpty(sottoTipoVino))
+    {
+        titoloPagina = "Le nostre selezioni di " + sottoTipoVino;
+    }
+    else
+    {
+        titoloPagina = "Le nostre selezioni di " + tipoVino;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@titoloPagina - Applicazione ASP.NET</title>
+    @Styles.Render("~/Content/bootstrap.min.css")
+    <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">@titoloPagina</h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+            @foreach (var vino in Model)
+            {
+                <div class="col mb-4">
+                    <div class="card h-100">
+                        <a href="@Url.Action("Dettaglio", "Home", new { id = vino.VinoId })">
+                            <img src="@vino.Img" class="card-img-top" alt="@vino.Nome">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">@vino.Nome</h5>
+                            <p class="card-text">Prezzo: @vino.Prezzo €</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</body>
+</html>

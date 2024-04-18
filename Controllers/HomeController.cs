@@ -19,6 +19,21 @@ namespace Capstone.Controllers
             return View(db.Vini.ToList());
         }
 
+        public ActionResult Noi()
+        {
+            return View();
+        }
+
+        public ActionResult DoveTrovarci()
+        {
+            return View();
+        }
+
+        public ActionResult Report()
+        {
+            return View();
+        }
+
         //GET: 
         public ActionResult Dettaglio(int? id)
         {
@@ -38,7 +53,7 @@ namespace Capstone.Controllers
             return View(vino);
         }
 
-
+  
 
     }
 }

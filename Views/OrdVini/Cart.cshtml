@@ -3,110 +3,190 @@
     ViewBag.Title = "Carrello";
 }
 
-@{
 
-    decimal sommaTotale = 0;
-    if (ViewBag.UserCart != null && ViewBag.UserCart.Count > 0)
-    {
-        foreach (var item in ViewBag.UserCart)
-        {
-            sommaTotale += item.Vino.Prezzo * item.Quantita;
+<div class="row">
+    <div class="col-md-8" style="max-height: 600px; overflow-y: auto;">
+        <h2>Il Tuo Carrello</h2>
+        @{
+            decimal sommaTotale = 0;
+            if (ViewBag.UserCart != null && ViewBag.UserCart.Count > 0)
+            {
+                foreach (var item in ViewBag.UserCart)
+                {
+                    sommaTotale += item.Vino.Prezzo * item.Quantita;
+                }
+            }
         }
-    }
-}
 
-<h2>Il Tuo Carrello</h2>
 
-@if (ViewBag.UserCart != null && ViewBag.UserCart.Count > 0)
-{
-    <div class="d-flex flex-wrap justify-content-start">
-        @foreach (var item in ViewBag.UserCart)
+
+        @if (ViewBag.UserCart != null && ViewBag.UserCart.Count > 0)
         {
-            <div class="card m-2" style="width: 18rem;">
-                <img src="@item.Vino.Img" class="card-img" alt="@item.Vino.Nome">
-                <div class="card-body">
-                    <h5 class="card-title">@item.Vino.Nome</h5>
-                    <p class="card-text">@Html.Raw(item.Vino.Prezzo.ToString("C"))</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        @using (Html.BeginForm("AggiornaQuantita", "OrdVini", FormMethod.Post, new { @class = "form-inline" }))
-                        {
-                            <input type="hidden" name="vinoId" value="@item.Vino.VinoId" />
-                            <button type="submit" name="operazione" value="incrementa" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i>+</button>
-                            <span class="mx-2">@item.Quantita</span>
-                            <button type="submit" name="operazione" value="decrementa" class="btn btn-outline-secondary btn-sm"><i class="fa fa-minus"></i>-</button>
-                        }
-                        @using (Html.BeginForm("RimuoviDalCarrello", "OrdVini", FormMethod.Post, new { @class = "form-inline" }))
-                        {
-                            <input type="hidden" name="vinoId" value="@item.Vino.VinoId" />
-                            <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i>Cancella</button>
-                        }
+            <div class="d-flex flex-wrap">
+                @foreach (var item in ViewBag.UserCart)
+                {
+                    <div class="card m-2" style="width: 15rem;">
+                        <img src="@item.Vino.Img" class="card-img" alt="@item.Vino.Nome">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Vino.Nome</h5>
+                            <p class="card-text">@Html.Raw(item.Vino.Prezzo.ToString("C"))</p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between align-items-center">
+                            @using (Html.BeginForm("AggiornaQuantita", "OrdVini", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                <input type="hidden" name="vinoId" value="@item.Vino.VinoId" />
+                                <button type="submit" name="operazione" value="incrementa" class="btn btn-outline-primary btn-sm"><i class="fa fa-plus"></i></button>
+                                <span class="mx-2">@item.Quantita</span>
+                                <button type="submit" name="operazione" value="decrementa" class="btn btn-outline-secondary btn-sm"><i class="fa fa-minus"></i></button>
+                            }
+                            @using (Html.BeginForm("RimuoviDalCarrello", "OrdVini", FormMethod.Post, new { @class = "form-inline" }))
+                            {
+                                <input type="hidden" name="vinoId" value="@item.Vino.VinoId" />
+                                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i>Cancella</button>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
             </div>
-        }
-    </div>
 
-    using (Html.BeginForm("CreateOrderFromCart", "OrdVini", FormMethod.Post, new { @class = "form-horizontal" }))
-    {
-        @Html.AntiForgeryToken()
-
-        <h4 class="my-2">Ordina</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            <div>
+                <h4>Somma Totale: @sommaTotale.ToString("C")</h4>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Cognome, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Cognome, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Cognome, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        if (ViewBag.Pagamento != null)
-        {
-<div class="form-group">
-    @Html.LabelFor(model => model.PagamentoId, "PagamentoId", htmlAttributes: new { @class = "control-label col-md-2" })
-    <div class="col-md-10">
-        @Html.DropDownList("PagamentoId", ViewBag.Pagamento as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.PagamentoId, "", new { @class = "text-danger" })
-    </div>
-</div>
-
         }
         else
         {
-            <p>Nessun metodo di pagamento disponibile. Si prega di contattare l'amministrazione.</p>
+            <p>Il carrello è vuoto</p>
         }
-
-        <div class="form-group my-2">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Conferma Ordine" class="btn btn-outline-success" />
-            </div>
-        </div>
-    }
-
-    <div>
-        <h4>Somma Totale: @sommaTotale.ToString("C")</h4>
     </div>
 
-}
-else
-{
-    <p>Il carrello è vuoto</p>
-}
+    <div class="col-md-4">
+        @if (ViewBag.UserCart != null && ViewBag.UserCart.Count > 0)
+        {
+            using (Html.BeginForm("CreateOrderFromCart", "OrdVini", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <h4 class="my-2">Ordina</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cognome, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cognome, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cognome, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                if (ViewBag.Pagamento != null)
+                {
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PagamentoId, "PagamentoId", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("PagamentoId", ViewBag.Pagamento as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control", id = "metodoPagamento" })
+                            @Html.ValidationMessageFor(model => model.PagamentoId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div id="datiCarta">
+                        <div class="form-group">
+                            <label for="numeroCarta" class="control-label col-md-2">Numero Carta</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="numeroCarta" name="numeroCarta" placeholder="Numero Carta">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="scadenzaCarta" class="control-label col-md-2">Scadenza Carta</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="scadenzaCarta" name="scadenzaCarta" placeholder="MM/YY">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cvv" class="control-label col-md-2">CVV</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV">
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p>Metodi di pagamento non disponibili.</p>
+                }
+
+                <div class="form-group my-2">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Conferma Ordine" class="btn btn-outline-success" />
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#metodoPagamento').change(function () {
+            var selectedMethod = $(this).val();
+            if (selectedMethod == "6") { // Assumendo che "6" sia l'ID per "Carta di Credito"
+                $('#datiCarta').show();
+            } else {
+                $('#datiCarta').hide();
+            }
+        });
+
+        var inputScadenza = document.getElementById('scadenzaCarta');
+        inputScadenza.addEventListener('input', function () {
+            var value = this.value.replace(/[^0-9\/]/g, '');
+            if ((value.match(/\//g) || []).length > 1) {
+                value = value.substring(0, value.length - 1);
+            }
+            if (value.indexOf('/') > 0) {
+                var parts = value.split('/');
+                if (parts[1].length > 2) {
+                    parts[1] = parts[1].substring(0, 2);
+                }
+                value = parts.join('/');
+            }
+            if (value.length > 5) {
+                value = value.substring(0, 5);
+            }
+            this.value = value;
+
+            if (!/^(\d{2}\/\d{2})$/.test(value) && value.length === 5) {
+                alert("Formato data non valido. Inserire nel formato MM/YY.");
+                this.value = '';
+            }
+        });
+
+        var inputCVV = document.getElementById('cvv');
+        var inputNumeroCarta = document.getElementById('numeroCarta');
+
+        inputCVV.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 3);
+        });
+
+        inputNumeroCarta.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 16);
+        });
+    });
+</script>

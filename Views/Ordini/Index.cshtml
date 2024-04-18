@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Capstone.Models.Ordini>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Riepilogo Ordini</h2>
+
+<div class="container pacifico-regular">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Nome Cliente</th>
+                            <th>Cognome Cliente</th>
+                            <th>Indirizzo</th>
+                            <th>Stato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.Users.Nome)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Users.Cognome)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Indirizzo)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Stato)</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Actions">
+                                        @Html.ActionLink("Dettagli", "Details", "OrdVini", new { id = item.OrdiniId }, new { @class = "btn btn-secondary btn-sm" })
+                                        @Html.ActionLink("Modifica", "Edit", new { id = item.OrdiniId }, new { @class = "btn btn-info btn-sm" })
+                                        @Html.ActionLink("Elimina", "Delete", new { id = item.OrdiniId }, new { @class = "btn btn-danger btn-sm" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

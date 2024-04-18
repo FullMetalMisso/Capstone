@@ -256,7 +256,6 @@
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Stile\Css\StyleHome.css" />
     <Content Include="Stile\Immagini\NomeLogo.png" />
-    <Content Include="Stile\Immagini\ssstik.io_1710794243398.mp4" />
     <Content Include="Stile\Immagini\_010be895-15a4-429d-a858-7a66e320d81e.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

@@ -85,7 +85,7 @@ namespace Capstone.Controllers
                     {
                         VinoId = vino.VinoId,
                         Nome = vino.Nome,
-                        Prezzo = vino.Prezzo,
+                        Prezzo = vino.PrezzoConSconto,
                         Img = vino.Img,
                         Tipo = vino.Tipo,
                         Anno = vino.Anno,

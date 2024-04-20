@@ -15,8 +15,13 @@
                 <div class="card-body">
                     <h5 class="card-title">Ordine: @ordine.OrdiniId</h5>
                     <dl class="dl-horizontal">
-                        <dt>@Html.DisplayNameFor(model => ordine.Users.Nome)</dt>
-                        <dd>@Html.DisplayFor(model => ordine.Users.Nome)</dd>
+                        <dt>Indirizzo Spedizione</dt>
+                        <dd>@Html.DisplayFor(model => ordine.Indirizzo)</dd>
+                    </dl>
+                    <hr> 
+                    <dl class="dl-horizontal">
+                        <dt>@Html.DisplayNameFor(model => ordine.Nome)</dt>
+                        <dd>@Html.DisplayFor(model => ordine.Nome)</dd>
                         <dt>@Html.DisplayNameFor(model => ordine.Indirizzo)</dt>
                         <dd>@Html.DisplayFor(model => ordine.Indirizzo)</dd>
                     </dl>

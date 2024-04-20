@@ -50,18 +50,17 @@
     </div>
     <div>
         <div class="text-center mt-4 ">
-            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Rosso" })" id="BottoneRicerca">Vini Rossi</a>
-            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Bianco" })" id="BottoneRicerca">Vini Bianchi</a>
-            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Prosecco" })" id="BottoneRicerca">Prosecco</a>
-            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Rum" })" id="BottoneRicerca">Rum</a>
-            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Gin" })" id="BottoneRicerca">Gin</a>
-
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Rosso" })" id="BottoneRicerca" class="btn btn-lg mb-2">Vini Rossi</a>
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Bianco" })" id="BottoneRicerca" class="btn btn-lg mb-2">Vini Bianchi</a>
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Prosecco" })" id="BottoneRicerca" class="btn btn-lg mb-2">Prosecco</a>
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Rum" })" id="BottoneRicerca" class="btn  btn-lg mb-2">Rum</a>
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Gin" })"  id="BottoneRicerca" class="btn btn-lg mb-2">Gin</a>
         </div>
     </div>
     <div class="container">
         <form class="search-form mb-4" action="@Url.Action("Search", "OrdVini")" method="get">
             <div class="input-group">
-                <input type="text" class="form-control" name="searchTerm" placeholder="Cerca vino..." />
+                <input type="text" class="form-control" name="searchTerm" placeholder="Con cosa ti ubriacherai oggi...?" />
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary">Cerca</button>
                 </div>

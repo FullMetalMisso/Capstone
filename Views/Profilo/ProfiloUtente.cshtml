@@ -3,64 +3,101 @@
 @{
     ViewBag.Title = "Modifica Profilo";
 }
-
+<style>
+    .edit-mode {
+        background-color:lightgoldenrodyellow ;
+    }
+</style>
 <h2>Modifica Profilo</h2>
 
 @using (Html.BeginForm("ModificaProfilo", "Profilo", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.UserId)
-    @Html.HiddenFor(model => model.Ruolo)
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.Ruolo)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Cognome, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Cognome, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Cognome, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cognome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cognome, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Cognome, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Indirizzo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Indirizzo, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Indirizzo, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
         </div>
-    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" id="editButton" class="btn btn-primary">Premi per modificare</button>
+                <input type="submit" value="Salva Modifiche" class="btn btn-primary" style="display: none;" id="submitButton" />
+                <button type="button" id="cancelButton" class="btn btn-secondary" style="display: none;">Annulla</button>
+
+            </div>
         </div>
     </div>
+}
 
-    <!-- Aggiungi altri campi del profilo utente qui -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var originalValues = {};
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Salva Modifiche" class="btn btn-primary" />
-        </div>
-    </div>
-</div>
+            $('#editButton').click(function () {
+                $('input[type=text]').each(function () {
+                    originalValues[$(this).attr('id')] = $(this).val();
+                });
+
+                $('input[type=text]').addClass('edit-mode').removeAttr('readonly');
+                $('#editButton').hide();
+                $('#submitButton').show();
+                $('#cancelButton').show();
+            });
+
+            $('#cancelButton').click(function () {
+                $('input[type=text]').each(function () {
+                    var fieldId = $(this).attr('id');
+                    $(this).val(originalValues[fieldId]);
+                });
+
+                $('input[type=text]').removeClass('edit-mode').attr('readonly', 'readonly');
+                $('#editButton').show();
+                $('#submitButton').hide();
+                $('#cancelButton').hide();
+            });
+        });
+    </script>
 }
 

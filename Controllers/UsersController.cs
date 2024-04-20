@@ -59,7 +59,7 @@ namespace Capstone.Controllers
 
                 FormsAuthentication.SetAuthCookie(users.UserId.ToString(), false); // Imposta il cookie di autenticazione cosí da loggarsi immediatamente
 
-                TempData["message"] = "Account creato con successo";
+                
                 return RedirectToAction("Index", "Home");
             }
             else

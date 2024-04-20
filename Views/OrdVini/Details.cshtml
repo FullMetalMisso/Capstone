@@ -2,14 +2,23 @@
 
 @{
     ViewBag.Title = "Details";
+
+    // Calcolo del prezzo totale senza IVA
+    var prezzoTotaleSenzaIVA = Model.Sum(item => (item.Vini.Prezzo * (1 - (item.Vini.Sconto ?? 0) / 100) * item.Quantita));
+
+    // Calcolo dell'IVA per gli alcolici (assumo che l'IVA sia al 22%)
+    var ivaAlcolici = prezzoTotaleSenzaIVA * 0.22M;
+    // Prezzo totale con IVA
+    var prezzoTotaleConIVA = prezzoTotaleSenzaIVA + ivaAlcolici;
 }
 
 <h2 class="my-4">Il tuo Ordine</h2>
 
-<p><strong>Nome:</strong> @Model[0].Ordini.Users.Nome</p>
-<p><strong>Cognome:</strong> @Model[0].Ordini.Users.Cognome</p>
+<p><strong>Nome:</strong> @Model[0].Ordini.Nome</p>
+<p><strong>Cognome:</strong> @Model[0].Ordini.Cognome</p>
 <p><strong>Indirizzo:</strong> @Model[0].Ordini.Indirizzo</p>
 <p><strong>Stato:</strong> @Model[0].Ordini.Stato</p>
+<p><strong>Account:</strong> @Model[0].Ordini.Users.Email</p>
 
 @if (Model.Any())
 {
@@ -30,16 +39,31 @@
                     <td>@vino.Vini.Nome</td>
                     <td>@vino.Quantita pz.</td>
                     <td>@(vino.Vini.Prezzo.ToString("0.##")) €</td>
-                    <td>@(vino.Vini.Sconto?.ToString("0.##") ?? "0") %</td> <!-- Visualizza lo sconto, se presente, altrimenti mostra 0 -->
-                    <td>@((vino.Vini.Prezzo * (1 - (vino.Vini.Sconto ?? 0) / 100) * vino.Quantita).ToString("0.##")) €</td>
+                    @if (vino.Vini.Sconto.HasValue && vino.Vini.Sconto != 0)
+                    {
+                        <td>@(vino.Vini.Sconto.Value.ToString("0.##")) %</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                        <!-- Non mostra nulla quando lo sconto è zero o null -->
+                    }
+                    <td>@((vino.Vini.Prezzo * (1 - (vino.Vini.Sconto ?? 0) / 100M) * vino.Quantita).ToString("0.##")) €</td>
+
                     <!-- Calcola il prezzo totale con lo sconto -->
                 </tr>
             }
             <tr>
-                <td style="height:75px; vertical-align: bottom;" colspan="4"><strong>Prezzo Totale:</strong></td>
-                <td style="vertical-align: bottom;">
-                    @(Model.Sum(item => (item.Vini.Prezzo * (1 - (item.Vini.Sconto ?? 0) / 100) * item.Quantita)).ToString("0.##")) € <!-- Calcola il prezzo totale dell'ordine -->
-                </td>
+                <td style="height:75px; vertical-align: bottom;" colspan="4"><strong>Prezzo Totale senza IVA:</strong></td>
+                <td style="vertical-align: bottom;">@(prezzoTotaleSenzaIVA.ToString("0.##")) €</td>
+            </tr>
+            <tr>
+                <td style="height:75px; vertical-align: bottom;" colspan="4"><strong>IVA per gli alcolici (22%):</strong></td>
+                <td style="vertical-align: bottom;">@(ivaAlcolici.ToString("0.##")) €</td>
+            </tr>
+            <tr>
+                <td style="height:75px; vertical-align: bottom;" colspan="4"><strong>Prezzo Totale con IVA:</strong></td>
+                <td style="vertical-align: bottom;">@(prezzoTotaleConIVA.ToString("0.##")) €</td>
             </tr>
         </tbody>
     </table>

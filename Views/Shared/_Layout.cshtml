@@ -12,7 +12,25 @@
     @Scripts.Render("~/bundles/modernizr")
     <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
     <style>
-    </style>
+        
+        #carrello {
+            width: 4rem;
+            position: relative; /* Aggiunto */
+        }
+
+        #numeroElementiCarrello {
+            position: absolute;
+            top: +25px; /* Regola la distanza dal bordo superiore */
+            right: 20px; /* Regola la distanza dal bordo destro */
+            border-radius: 50%;
+            color: white;
+            background-color: #FFA630 !important;
+            padding: 8px; /* Riduce il padding per rendere il cerchio più piccolo */
+            font-size: 10px; /* Riduce il font-size */
+            line-height: 1;
+        }
+    
+  </style>
 
 </head>
 <body>
@@ -56,16 +74,20 @@
                     }
                     else
                     {
-                        <li class="nav-item"><a href="@Url.Action("Login", "Auth")" class="nav-link btn btn-outline-light text-start">Login</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link active btntext-start" aria-current="page" href="@Url.Action("Login", "Auth")">Login</a>
+                        </li>
                     }
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
 
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
                         <li class="nav-item">
+
                             <a href="@Url.Action("Cart", "OrdVini")" class="nav-link">
-                                <i class="fas fa-shopping-cart"></i>
+                                <img id="carrello" src="~/Stile/Immagini/carrello.png" alt="carrello" />
                                 <span id="numeroElementiCarrello" class="badge bg-primary"></span>
                             </a>
                         </li>
@@ -87,17 +109,34 @@
 
     @Scripts.Render("~/bundles/jquery")
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+   
     <script>
-  $(document).ready(function () {
+    $(document).ready(function () {
+    // Funzione per controllare se la larghezza della finestra è inferiore a 768px (modalità mobile)
+    function isMobile() {
+        return window.innerWidth < 991;
+    }
+
+    // Funzione per mostrare o nascondere l'elemento numeroElementiCarrello
+    function updateCartBadgeVisibility() {
+        if (isMobile()) {
+            $("#numeroElementiCarrello").hide();
+        } else {
+            $("#numeroElementiCarrello").show();
+        }
+    }
+
     // Effettua una richiesta AJAX per ottenere il numero di elementi nel carrello
     $.ajax({
-        url: "@Url.Action("GetNumeroElementiCarrello", "OrdVini")", // Aggiungi un'azione nel controller per ottenere il numero di elementi nel carrello
+        url: "@Url.Action("GetNumeroElementiCarrello", "OrdVini")",
         type: "GET",
         success: function (data) {
             // Verifica se ci sono elementi nel carrello
             if (data > 0) {
                 // Aggiorna il contenuto del badge con il numero di elementi nel carrello
                 $("#numeroElementiCarrello").text(data);
+                // Mostra il badge solo se non sei in modalità mobile
+                updateCartBadgeVisibility();
             } else {
                 // Nasconde il badge se non ci sono elementi nel carrello
                 $("#numeroElementiCarrello").hide();
@@ -107,8 +146,20 @@
             console.error("Errore durante il recupero del numero di elementi nel carrello.");
         }
     });
-});
 
+    // Controlla se la larghezza della finestra cambia per gestire la visibilità del badge in modalità mobile
+    $(window).resize(updateCartBadgeVisibility);
+
+    // Gestisci il click sul tasto ad hamburger
+    $(".navbar-toggler").click(function () {
+        // Verifica se la navbar è stata aperta
+        var navbarExpanded = $(this).attr("aria-expanded") === "true";
+        // Se la navbar è stata aperta e siamo in modalità mobile, nascondi l'elemento numeroElementiCarrello
+        if (navbarExpanded && isMobile()) {
+            $("#numeroElementiCarrello").hide();
+        }
+    });
+});
     </script>
     @RenderSection("scripts", required: false)
 </body>

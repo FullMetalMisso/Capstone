@@ -255,7 +255,10 @@
     <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Stile\Css\StyleHome.css" />
+    <Content Include="Stile\Immagini\carrello.png" />
     <Content Include="Stile\Immagini\NomeLogo.png" />
+    <Content Include="Stile\Immagini\wine-bottle-wooden-background.jpg" />
+    <Content Include="Stile\Immagini\wood-wine-barrels-stored-winery-fermentation-process.jpg" />
     <Content Include="Stile\Immagini\_010be895-15a4-429d-a858-7a66e320d81e.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

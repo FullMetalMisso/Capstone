@@ -5,47 +5,138 @@
     ViewBag.Title = "Login";
 }
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
+    <style>
+        body {
+            background-image: url('../../stile/immagini/wine-bottle-wooden-background.jpg');
+            background-size: cover; /* Imposta l'immagine di sfondo per coprire l'intera area del body */
+            background-position: center; /* Centra l'immagine di sfondo */
+            background-repeat: no-repeat; /* Impedisce la ripetizione dell'immagine di sfondo */
+            background-attachment: fixed; /* Fissa l'immagine di sfondo in modo che non scorra con il contenuto */
+        }
+        .login-container {
+            margin-top: 50px;
+            text-align: center; /* Centra il contenuto */
+        }
 
-<h3 class="text-center my-4">Login</h3>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            @using (Html.BeginForm())
-            {
-                @Html.AntiForgeryToken()
+        /* Card per il login */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px; /* Limita la larghezza per una migliore leggibilità */
+            margin: 0 auto; /* Centra la card */
+        }
 
-                if (TempData["ErrorLogin"] != null)
-                {
-                    <div class="alert alert-danger">
-                        Le credenziali non sono corrette
-                    </div>
-                }
+        /* Header della card */
+        .card-header {
+            background-color: #8c2d19; /* Un colore più caldo per richiamare il tema dei vini */
+            color: #fff;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+            padding: 20px; /* Aumenta il padding per uno spazio più ampio */
+        }
 
-                if (TempData["message"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        @TempData["message"]
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                }
+        /* Corpo della card */
+        .card-body {
+            padding: 30px;
+        }
 
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.Email, new { @class = "form-label" })
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
+        /* Stile per i campi del modulo */
+        .form-group {
+            margin-bottom: 25px; /* Aumenta lo spazio tra i campi */
+        }
 
-                <div class="mb-3">
-                    @Html.LabelFor(model => model.Password, new { @class = "form-label" })
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                </div>
+        .form-control {
+            border-radius: 30px; /* Leggermente più arrotondati */
+            padding: 15px;
+            font-size: 16px;
+        }
 
-                <button type="submit" class="btn btn-primary my-2">Login</button>
-                <a href="@Url.Action("Create", "Users")" class="text-info d-block mt-3">Non sei ancora registrato?</a>
-              
+        /* Bottone di invio del modulo */
+        .btn-primary {
+            border-radius: 30px;
+            padding: 15px 30px;
+            font-size: 16px;
+            background-color: #8c2d19; /* Usa lo stesso colore del card-header */
+            border: none; /* Rimuove il bordo */
+        }
 
-
-
+            .btn-primary:hover {
+                background-color: #6a1a0f; /* Un colore più scuro al passaggio del mouse */
             }
+
+        /* Link per registrarsi */
+        .register-link {
+            text-align: center;
+            color: #8c2d19; /* Colore simile al card-header */
+            margin-top: 20px; /* Aumenta lo spazio sopra il link */
+            display: block; /* Per farlo apparire come un blocco separato */
+        }
+    </style>
+</head>
+<body>
+    <div class="container login-container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            if (TempData["ErrorLogin"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    Le credenziali non sono corrette
+                                </div>
+                            }
+
+                            if (TempData["message"] != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @TempData["message"]
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <div class="text-center">
+                                    
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control mx-auto", placeholder = "Inserisci l'indirizzo email" } })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="text-center">
+                                    
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control mx-auto", placeholder = "Inserisci la password" } })
+                                </div>
+                            </div>
+
+
+
+
+                            <button type="submit" class="btn btn-primary mb-2 btn-block">Esegui l'accesso</button>
+                            <div class="register-link">
+                                <a href="@Url.Action("Create", "Users")" class="text-info">Non sei ancora registrato?</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
+</body>
+</html>

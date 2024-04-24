@@ -15,6 +15,11 @@ namespace Capstone.Controllers
     {
         private DBContext db = new DBContext();
 
+        public ActionResult Index()
+        {
+            var ordArt = db.OrdVini.Include(o => o.Vini).Include(o => o.Ordini);
+            return View(ordArt.ToList());
+        }
         // GET: OrdVini
         public ActionResult Details(int? id)
         {

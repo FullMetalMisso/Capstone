@@ -202,6 +202,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Users.cs" />
     <Compile Include="Models\Vini.cs" />
+    <Compile Include="Views\OrdVini\VinisController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -248,6 +249,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="Database\Capstone.bacpac" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -257,6 +259,7 @@
     <Content Include="Stile\Css\StyleHome.css" />
     <Content Include="Stile\Immagini\carrello.png" />
     <Content Include="Stile\Immagini\NomeLogo.png" />
+    <Content Include="Stile\Immagini\Pubblicità_Banner.mp4" />
     <Content Include="Stile\Immagini\wine-bottle-wooden-background.jpg" />
     <Content Include="Stile\Immagini\wood-wine-barrels-stored-winery-fermentation-process.jpg" />
     <Content Include="Stile\Immagini\_010be895-15a4-429d-a858-7a66e320d81e.png" />
@@ -297,6 +300,11 @@
     <Content Include="Views\Home\DoveTrovarci.cshtml" />
     <Content Include="Views\OrdVini\ViniPerTipo.cshtml" />
     <Content Include="Views\Home\Report.cshtml" />
+    <Content Include="Views\Vinis\Create.cshtml" />
+    <Content Include="Views\Vinis\Delete.cshtml" />
+    <Content Include="Views\Vinis\Details.cshtml" />
+    <Content Include="Views\Vinis\Edit.cshtml" />
+    <Content Include="Views\Vinis\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,35 +7,22 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title - Applicazione ASP.NET</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
+   
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
+     <link href="~/Stile/Css/StyleHome.css" rel="stylesheet" />
     <style>
-        
-        #carrello {
-            width: 4rem;
-            position: relative; /* Aggiunto */
+        body {
+            padding-top: 140px;
         }
+   
 
-        #numeroElementiCarrello {
-            position: absolute;
-            top: +25px; /* Regola la distanza dal bordo superiore */
-            right: 20px; /* Regola la distanza dal bordo destro */
-            border-radius: 50%;
-            color: white;
-            background-color: #FFA630 !important;
-            padding: 8px; /* Riduce il padding per rendere il cerchio più piccolo */
-            font-size: 10px; /* Riduce il font-size */
-            line-height: 1;
-        }
-    
-  </style>
+    </style>
 
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body navbar-custom">
+    <nav class="navbar navbar-expand-lg bg-body navbar-custom fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">
                 <div style="width: 125px; height: 125px; border-radius: 50%; overflow: hidden;">
@@ -102,8 +89,34 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Applicazione ASP.NET</p>
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Informazioni</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Chi siamo</a></li>
+                            <li><a href="#">Contatti</a></li>
+                            <li><a href="#">Termini e condizioni</a></li>
+                        </ul>
+                    </div>
+                   
+                    <div class="col-md-4">
+                        <h5>Seguici</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
+                            <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <hr>
+                        <p>&copy; @DateTime.Now.Year - Dal Lupo Ubriaco</p>
+                    </div>
+                </div>
+            </div>
         </footer>
     </div>
 
@@ -119,7 +132,7 @@
 
     // Funzione per mostrare o nascondere l'elemento numeroElementiCarrello
     function updateCartBadgeVisibility() {
-        if (isMobile()) {
+        if (data >0 && isMobile()) {
             $("#numeroElementiCarrello").hide();
         } else {
             $("#numeroElementiCarrello").show();

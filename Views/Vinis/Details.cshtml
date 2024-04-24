@@ -1,0 +1,98 @@
+﻿@model Capstone.Models.Vini
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Vini</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Img)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Img)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Anno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Anno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descrizione)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descrizione)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Prezzo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Prezzo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Magazzino)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Magazzino)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Produttore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Produttore)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SottoTipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SottoTipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sconto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sconto)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.VinoId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

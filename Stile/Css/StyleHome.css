@@ -19,6 +19,7 @@ body {
 }
 
 .navbar.navbar-custom {
+    padding-inline-start:10%;
     background-color: #8B0000 !important;
 }
 
@@ -111,9 +112,26 @@ body {
     #BottoneRicerca:hover {
         background-color: #A52A2A;
         border-color: #A52A2A;
+        color: #FFA630;
     }
 
     #BottoneRicerca:active {
         transform: translateY(1px);
     }
 
+#carrello {
+    width: 4rem;
+    position: relative; /* Aggiunto */
+}
+
+#numeroElementiCarrello {
+    position: absolute;
+    top: +25px; /* Regola la distanza dal bordo superiore */
+    right: 20px; /* Regola la distanza dal bordo destro */
+    border-radius: 50%;
+    color: white;
+    background-color: #FFA630 !important;
+    padding: 8px; /* Riduce il padding per rendere il cerchio più piccolo */
+    font-size: 10px; /* Riduce il font-size */
+    line-height: 1;
+}

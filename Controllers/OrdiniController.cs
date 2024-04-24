@@ -28,14 +28,19 @@ namespace Capstone.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var idInt = Convert.ToInt32(id);
-            var order = db.Ordini
-                        .Where(o => o.UserId == idInt).ToList();
-            if (order == null)
+            var orders = db.Ordini
+                         .Where(o => o.UserId == idInt)
+                         .OrderByDescending(o => o.OrdiniId) // Ordina per ID in modo decrescente
+                         .ToList();
+
+            if (orders == null || orders.Count == 0)
             {
                 return HttpNotFound();
             }
-            return View(order);
+
+            return View(orders);
         }
 
         // GET: Ordini/Create

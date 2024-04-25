@@ -86,38 +86,48 @@
 
 
     </nav>
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
-        <hr />
-        <footer class="footer">
+        <footer class="footer navbar-custom">
             <div class="container">
                 <div class="row">
                     <div class="col-md-4">
-                        <h5>Informazioni</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#">Chi siamo</a></li>
-                            <li><a href="#">Contatti</a></li>
+                        <h5 class="text-center">Informazioni</h5>
+                        <ul class="list-unstyled text-center">
+                            <li><a href="@Url.Action("Noi", "Home")">Chi siamo</a></li>
+                            <li><a href="@Url.Action("DoveTrovarci", "Home")">Contatti</a></li>
                             <li><a href="#">Termini e condizioni</a></li>
                         </ul>
                     </div>
-                   
                     <div class="col-md-4">
-                        <h5>Seguici</h5>
-                        <ul class="list-unstyled">
+                        <h5 class="text-center">Link Utili</h5>
+                        <ul class="list-unstyled text-center">
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Politiche aziendali</a></li>
+                            <li><a href="#">Recensioni dei clienti</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5 class="text-center">Seguici</h5>
+                        <ul class="list-unstyled social-media-icons text-center">
                             <li><a href="#"><i class="fab fa-facebook-f"></i> Facebook</a></li>
                             <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
                             <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
                         </ul>
                     </div>
+                   
                 </div>
-                <div class="row">
-                    <div class="col-md-12 text-center">
+                <div class="row text-center">
+                    <div class="col-md-12">
                         <hr>
-                        <p>&copy; @DateTime.Now.Year - Dal Lupo Ubriaco</p>
+                        <p>Una tana per gli amanti del buon vino</p>
+                        <p>Orari di apertura: Lun-Ven 9:00-18:00, Sab 9:00-13:00</p>
+                        <p>&copy; @DateTime.Now.Year - created by Francesco Missorini</p>
                     </div>
                 </div>
             </div>
         </footer>
+
     </div>
 
     @Scripts.Render("~/bundles/jquery")

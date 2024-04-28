@@ -1,54 +1,129 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@ViewBag.Title - Applicazione ASP.NET</title>
-    @Styles.Render("~/Content/bootstrap.min.css")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    <link rel="stylesheet" type="text/css" href="~/Stile/Css/StyleHome.css" />
-  
-   
-</head>
-<body>
-    <div id="carouselExampleCaptions" class="carousel slide">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://www.vinatis.it/img/slider/new/1381" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
+﻿@model IEnumerable<Capstone.Models.Vini>
 
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="https://resources.vino.com/data/slideshowItemImmagine/slideshowItemImmagine-6003.jpg" class="d-block w-100" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Etichette prestigiose</h5>
-                    <p>Una vasta scelta di bottiglie da tutto il mondo.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <video class="video-fluid d-block w-100" autoplay loop controls style="max-width: 95%;">
-                    <source src="~/Stile/Immagini/Pubblicit%c3%a0_Banner.mp4" type="video/mp4" />
-                    Your browser does not support the video tag.
-                </video>
+@if (User.IsInRole("Amministratore"))
+{
+   <div class="container">
+       <div class="text-center mt-4">
+           @if (User.IsInRole("Amministratore"))
+           {
+               @Html.ActionLink("Aggiungi Nuovo Articolo", "Create", "Vinis", null, new { @class = "btn btn-primary btn-lg mb-4" })
+           }
+       </div>
+       <div class="d-none d-md-block">
+           <!-- Nascondi la tabella su dispositivi mobili -->
+           <div class="table-responsive">
+               <table class="table table-bordered table-striped">
+                   <thead class="thead-dark">
+                       <tr>
+                           <th scope="col">Nome</th>
+                           @if (User.IsInRole("Amministratore"))
+                           {
+                               <th scope="col">Immagine</th>
+                               <th scope="col">Prezzo</th>
+                               <th scope="col">Magazzino</th>
+                               <th scope="col">Azioni</th>
+                           }
+                       </tr>
+                   </thead>
+                   <tbody>
+                       @foreach (var item in Model)
+                       {
+                           <tr>
+                               <td>@Html.DisplayFor(modelItem => item.Nome)</td>
+                               @if (User.IsInRole("Amministratore"))
+                               {
+                                   <td>
+                                      <img src="@item.Img" class="img img-fluid" alt="@item.Nome" style="max-width: 100px;">
+                                   </td>
+                                   <td>@Html.DisplayFor(modelItem => item.Prezzo) €</td>
+                                   <td>@Html.DisplayFor(modelItem => item.Magazzino)</td>
+                                   <td>
+                                       <div class="btn-group" role="group" aria-label="Actions">
+                                           @Html.ActionLink("Dettagli", "Details", "Vinis", new { id = item.VinoId }, new { @class = "btn btn-secondary btn-sm" })
+                                           @Html.ActionLink("Modifica", "Edit", "Vinis", new { id = item.VinoId }, new { @class = "btn btn-info btn-sm" })
+                                           <a href="@Url.Action("Delete", "Vinis", new { id = item.VinoId })" class="btn btn-danger btn-sm" title="Cancella">
+                                               <span class="fas fa-trash-alt" style="line-height: 1;"></span>
+                                           </a>
+                                       </div>
+                                   </td>
+                               }
+                           </tr>
+                       }
+                   </tbody>
+               </table>
+           </div>
+       </div>
+       <div class="d-md-none">
+           <!-- Visualizza i dati come lista su dispositivi mobili -->
+           <ul class="list-group">
+               @foreach (var item in Model)
+               {
+                   <li class="list-group-item">
+                       <div>@Html.DisplayFor(modelItem => item.Nome)</div>
+                       @if (User.IsInRole("Amministratore"))
+                       {
+                           <div class="text-center">
+                               <!-- Centra l'immagine su dispositivi mobili -->
+                               <img src="@item.Img" class="img-fluid " alt="@item.Nome" style="max-width: 100px;">
+                           </div>
+                           <div>Prezzo: @Html.DisplayFor(modelItem => item.Prezzo) €</div>
+                           <div>Magazzino: @Html.DisplayFor(modelItem => item.Magazzino)</div>
+                           <div>
+                               <div class="btn-group" role="group" aria-label="Actions">
+                                   @Html.ActionLink("Dettagli", "Details", "Vinis", new { id = item.VinoId }, new { @class = "btn btn-secondary btn-sm" })
+                                   @Html.ActionLink("Modifica", "Edit", "Vinis", new { id = item.VinoId }, new { @class = "btn btn-info btn-sm" })
+                                   <a href="@Url.Action("Delete", "Vinis", new { id = item.VinoId })" class="btn btn-danger btn-sm" title="Cancella">
+                                       <span class="fas fa-trash-alt" style="line-height: 1;"></span>
+                                   </a>
+                               </div>
+                           </div>
+                       }
+                   </li>
+               }
+           </ul>
+       </div>
+   </div>
+}
+
+else
+{
+<div id="carouselExampleCaptions" class="carousel slide">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://www.vinatis.it/img/slider/new/1381" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
+        <div class="carousel-item">
+            <img src="https://resources.vino.com/data/slideshowItemImmagine/slideshowItemImmagine-6003.jpg" class="d-block w-100" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>Etichette prestigiose</h5>
+                <p>Una vasta scelta di bottiglie da tutto il mondo.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <video class="video-fluid d-block mx-auto w-75" autoplay loop controls style="max-width: 100%;">
+                <source src="~/Stile/Immagini/Pubblicit%c3%a0_Banner.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+</div>
     <div>
         <div class="text-center mt-4 ">
             <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Rosso" })" id="BottoneRicerca" class="btn btn-lg mb-2">Vini Rossi</a>
@@ -56,6 +131,7 @@
             <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Prosecco" })" id="BottoneRicerca" class="btn btn-lg mb-2">Prosecco</a>
             <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Rum" })" id="BottoneRicerca" class="btn  btn-lg mb-2">Rum</a>
             <a href="@Url.Action("ViniPerTipo", "OrdVini", new { Tipo = "Spirits", sottoTipo = "Gin" })" id="BottoneRicerca" class="btn btn-lg mb-2">Gin</a>
+            <a href="@Url.Action("ViniPerTipo", "OrdVini", new { tipo = "Champagne" })" id="BottoneRicerca" class="btn btn-lg mb-2">Champagne</a>
         </div>
     </div>
     <div class="container">
@@ -98,6 +174,4 @@
         </div>
 
     </div>
-    
-</body>
-</html>
+}

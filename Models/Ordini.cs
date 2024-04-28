@@ -27,7 +27,7 @@ namespace Capstone.Models
 
         public decimal Totale { get; set; }
 
-        [Column(TypeName = "date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Consegna { get; set; }
 
         public int UserId { get; set; }

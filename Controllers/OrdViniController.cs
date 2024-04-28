@@ -15,12 +15,14 @@ namespace Capstone.Controllers
     {
         private DBContext db = new DBContext();
 
+        [Authorize(Roles = "Amministratore")]
         public ActionResult Index()
         {
             var ordArt = db.OrdVini.Include(o => o.Vini).Include(o => o.Ordini);
             return View(ordArt.ToList());
         }
         // GET: OrdVini
+        [Authorize(Roles = "Amministratore,Cliente")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -43,6 +45,7 @@ namespace Capstone.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Cliente")]
         public ActionResult AddToCart(int? id)
         {
             //controllo id
@@ -117,7 +120,7 @@ namespace Capstone.Controllers
         }
 
         [HttpGet]
-
+        [Authorize(Roles = "Cliente")]
         public ActionResult Cart()
         {
             //inizializzazione lista VinoCart
@@ -165,7 +168,7 @@ namespace Capstone.Controllers
             return Json(numeroElementiCarrello, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-
+        [Authorize(Roles = "Cliente")]
         public ActionResult RimuoviDalCarrello(int vinoId)
         {
             var viniCart = new List<VinoCart>();
@@ -198,7 +201,9 @@ namespace Capstone.Controllers
         }
        
         [HttpPost]
+        [Authorize(Roles = "Cliente")]
         [ValidateAntiForgeryToken]
+
         public ActionResult CreateOrderFromCart(Ordini ordVino)
         {
             // Imposta l'ID dell'utente per l'ordine
@@ -261,7 +266,7 @@ namespace Capstone.Controllers
 
 
         [HttpPost]
-        
+        [Authorize(Roles = "Cliente")]
         public ActionResult AggiornaQuantita(int vinoId, string operazione)
         {
             // Recupera l'elenco degli articoli attualmente nel carrello dal cookie
@@ -328,6 +333,7 @@ namespace Capstone.Controllers
         }
 
         // GET: OrdVini/Delete/5
+        [Authorize(Roles = "Amministratore,Cliente")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -344,6 +350,7 @@ namespace Capstone.Controllers
 
         // POST: OrdVini/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Amministratore")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

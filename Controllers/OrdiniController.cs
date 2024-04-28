@@ -15,6 +15,7 @@ namespace Capstone.Controllers
         private DBContext db = new DBContext();
 
         // GET: Ordini
+        [Authorize(Roles = "Amministratore")]
         public ActionResult Index()
         {
             var ordini = db.Ordini.Include(o => o.Pagamenti).Include(o => o.Users);
@@ -22,6 +23,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Ordini/Details/5
+        [Authorize(Roles = "Cliente, Amministratore")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -43,34 +45,36 @@ namespace Capstone.Controllers
             return View(orders);
         }
 
-        // GET: Ordini/Create
-        public ActionResult Create()
-        {
-            ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento");
-            ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome");
-            return View();
-        }
+        // GET: Ordini/Create 
 
-        // POST: Ordini/Create
-        // Per la protezione da attacchi di overposting, abilitare le proprietà a cui eseguire il binding. 
-        // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrdiniId,Indirizzo,Stato,Totale,Consegna,UserId,Nome,Cognome,PagamentoId")] Ordini ordini)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Ordini.Add(ordini);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+        //public ActionResult Create()
+        //{
+        //    ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento");
+        //    ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome");
+        //    return View();
+        //}
 
-            ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento", ordini.PagamentoId);
-            ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome", ordini.UserId);
-            return View(ordini);
-        }
+        //// POST: Ordini/Create
+        //// Per la protezione da attacchi di overposting, abilitare le proprietà a cui eseguire il binding. 
+        //// Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create([Bind(Include = "OrdiniId,Indirizzo,Stato,Totale,Consegna,UserId,Nome,Cognome,PagamentoId")] Ordini ordini)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Ordini.Add(ordini);
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento", ordini.PagamentoId);
+        //    ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome", ordini.UserId);
+        //    return View(ordini);
+        //}
 
         // GET: Ordini/Edit/5
+        [Authorize(Roles = "Amministratore")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -92,20 +96,34 @@ namespace Capstone.Controllers
         // Per altri dettagli, vedere https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrdiniId,Indirizzo,Stato,Totale,Consegna,UserId,Nome,Cognome,PagamentoId")] Ordini ordini)
+        [Authorize(Roles = "Amministratore")]
+        public ActionResult Edit(int id, string stato, DateTime consegna)
         {
+            var ordine = db.Ordini.Find(id);
+            if (ordine == null)
+            {
+                return HttpNotFound();
+            }
+
             if (ModelState.IsValid)
             {
-                db.Entry(ordini).State = EntityState.Modified;
+                // Imposta manualmente solo Stato e Consegna
+                ordine.Stato = stato;
+                ordine.Consegna = consegna;
+
+                db.Entry(ordine).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento", ordini.PagamentoId);
-            ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome", ordini.UserId);
-            return View(ordini);
+
+            // Se il modello non è valido, ricarica le liste e restituisci la vista con l'ordine
+            ViewBag.PagamentoId = new SelectList(db.Pagamenti, "PagamentoId", "TipoPagamento", ordine.PagamentoId);
+            ViewBag.UserId = new SelectList(db.Users, "UserId", "Nome", ordine.UserId);
+            return View(ordine);
         }
 
         // GET: Ordini/Delete/5
+        [Authorize(Roles = "Amministratore")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -123,6 +141,7 @@ namespace Capstone.Controllers
         // POST: Ordini/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Amministratore")]
         public ActionResult DeleteConfirmed(int id)
         {
             Ordini ordini = db.Ordini.Find(id);

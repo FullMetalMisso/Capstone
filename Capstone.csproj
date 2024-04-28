@@ -195,6 +195,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DBContext.cs" />
+    <Compile Include="Models\RoleManager.cs" />
     <Compile Include="Models\VinoCart.cs" />
     <Compile Include="Models\Ordini.cs" />
     <Compile Include="Models\OrdVini.cs" />
@@ -295,7 +296,6 @@
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
-    <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Home\Noi.cshtml" />
     <Content Include="Views\Home\DoveTrovarci.cshtml" />
     <Content Include="Views\OrdVini\ViniPerTipo.cshtml" />
@@ -304,12 +304,9 @@
     <Content Include="Views\Vinis\Delete.cshtml" />
     <Content Include="Views\Vinis\Details.cshtml" />
     <Content Include="Views\Vinis\Edit.cshtml" />
-    <Content Include="Views\Vinis\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Payment\" />
-    <Folder Include="Views\Vini\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

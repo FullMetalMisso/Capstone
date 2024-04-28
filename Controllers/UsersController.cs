@@ -22,6 +22,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Users/Details/5
+        [Authorize(Roles = "Cliente, Amministratore")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -71,6 +72,7 @@ namespace Capstone.Controllers
 
         }
         // GET: Users/Edit/5
+        [Authorize(Roles = "Cliente")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -102,6 +104,7 @@ namespace Capstone.Controllers
         }
 
         // GET: Users/Delete/5
+        [Authorize(Roles = "Cliente")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -118,6 +121,7 @@ namespace Capstone.Controllers
 
         // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Cliente")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

@@ -67,9 +67,16 @@
             </tr>
         </tbody>
     </table>
-    <div>
-        <a href="/Ordini/Details/@User.Identity.Name" class="btn btn-outline-primary my-3">Torna allo Storico</a>
-    </div>
+    if (User.IsInRole("Cliente"))
+    {
+        <div>
+            <a href="/Ordini/Details/@User.Identity.Name" class="btn btn-outline-primary my-3">Torna allo Storico</a>
+        </div>
+    }
+    if (User.IsInRole("Amministratore"))
+    {
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='@Url.Action("Index", "Ordini")'">Torna indietro</button>
+    }
 }
 else
 {
